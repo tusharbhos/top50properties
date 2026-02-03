@@ -368,7 +368,14 @@ const DUMMY_RESULTS = [
 
 // ─── SHARED COMPONENTS ──────────────────────────────────────────────────────
 
-function OrangeBtn({ children, onClick, className = "", disabled = false }) {
+interface OrangeBtnProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+  className?: string;
+  disabled?: boolean;
+}
+
+function OrangeBtn({ children, onClick, className = "", disabled = false }: OrangeBtnProps) {
   return (
     <button
       onClick={onClick}
@@ -379,6 +386,31 @@ function OrangeBtn({ children, onClick, className = "", disabled = false }) {
     >
       {children}
     </button>
+  );
+}
+
+interface DropdownProps {
+  label: string;
+  options: string[];
+  value: string;
+  onChange: (value: string) => void;
+}
+
+function Dropdown({ label, options, value, onChange }: DropdownProps) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm md:text-base text-gray-600 bg-white focus:outline-none focus:border-orange-400 cursor-pointer"
+      style={{ appearance: "auto" }}
+    >
+      <option value="">{label}</option>
+      {options.map((o) => (
+        <option key={o} value={o}>
+          {o}
+        </option>
+      ))}
+    </select>
   );
 }
 
