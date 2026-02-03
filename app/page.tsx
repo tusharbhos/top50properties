@@ -368,7 +368,7 @@ const DUMMY_RESULTS = [
 
 // ─── SHARED COMPONENTS ──────────────────────────────────────────────────────
 
-function OrangeBtn({ children, onClick, className = "", disabled = false }) {
+function OrangeBtn({ children, onClick, className = "", disabled = false }: { children: any; onClick?: () => void; className?: string; disabled?: boolean }) {
   return (
     <button
       onClick={onClick}
@@ -382,7 +382,7 @@ function OrangeBtn({ children, onClick, className = "", disabled = false }) {
   );
 }
 
-function Dropdown({ label, options, value, onChange }) {
+function Dropdown({ label, options, value, onChange }: { label: string; options: string[]; value: string; onChange: (val: string) => void }) {
   return (
     <select
       value={value}
@@ -401,7 +401,7 @@ function Dropdown({ label, options, value, onChange }) {
 }
 
 // ─── STEP INDICATOR (subtle top bar) ────────────────────────────────────────
-function StepBar({ step, total = 5 }) {
+function StepBar({ step, total = 5 }: { step: number; total?: number }) {
   return (
     <div className="fixed top-0 left-0 right-0 h-1 bg-gray-200 z-50">
       <div
@@ -415,7 +415,7 @@ function StepBar({ step, total = 5 }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 1 — WELCOME SCREEN
 // ─────────────────────────────────────────────────────────────────────────────
-function WelcomeStep({ onNext }) {
+function WelcomeStep({ onNext }: { onNext: () => void }) {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -442,7 +442,7 @@ function WelcomeStep({ onNext }) {
   return (
     <>
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0  flex items-center justify-center p-4">
           <div className="relative bg-white rounded-2xl shadow-xl border-2 border-orange-500 w-full max-w-md px-6 md:px-8 py-8 md:py-10 flex flex-col items-center text-center">
             <button
               onClick={handleSkipPopup}
@@ -505,15 +505,15 @@ function WelcomeStep({ onNext }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 2 — LOCATION (Country → State → City → Region)
 // ─────────────────────────────────────────────────────────────────────────────
-function LocationStep({ onNext }) {
+function LocationStep({ onNext }: { onNext: (data: { country: string; state: string; city: string; region: string }) => void }) {
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
   const [region, setRegion] = useState("");
 
-  const stateOpts = country ? STATES[country] || [] : [];
-  const cityOpts = state ? CITIES[state] || [] : [];
-  const regionOpts = city ? REGIONS[city] || [] : [];
+  const stateOpts = country ? STATES[country as keyof typeof STATES] || [] : [];
+  const cityOpts = state ? CITIES[state as keyof typeof CITIES] || [] : [];
+  const regionOpts = city ? REGIONS[city as keyof typeof REGIONS] || [] : [];
 
   useEffect(() => {
     setState("");
@@ -616,7 +616,7 @@ function LocationStep({ onNext }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 3 — CATEGORY GRID (8 orange pill cards)
 // ─────────────────────────────────────────────────────────────────────────────
-function CategoryStep({ onSelect }) {
+function CategoryStep({ onSelect }: { onSelect: (id: string) => void }) {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 py-6 md:py-0">
       <div className="w-full max-w-4xl text-center">
@@ -630,7 +630,7 @@ function CategoryStep({ onSelect }) {
             <button
               key={cat.id}
               onClick={() => onSelect(cat.id)}
-              className="bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-bold rounded-lg px-3 py-4 md:px-4 md:py-5 text-xs md:text-sm leading-snug transition-all duration-150 shadow-sm whitespace-pre-line min-h-[90px] md:min-h-[110px] flex items-center justify-center"
+              className="bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-bold rounded-lg px-3 py-4 md:px-4 md:py-5 text-xs md:text-sm leading-snug transition-all duration-150 shadow-sm whitespace-pre-line flex items-center justify-center"
             >
               {cat.label}
             </button>
@@ -644,11 +644,11 @@ function CategoryStep({ onSelect }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 4 — SUB-OPTION circles (multi-select)
 // ─────────────────────────────────────────────────────────────────────────────
-function SubOptionStep({ categoryId, onNext }) {
-  const data = SUB_OPTIONS[categoryId];
-  const [selected, setSelected] = useState([]);
+function SubOptionStep({ categoryId, onNext }: { categoryId: string; onNext: (subs: string[]) => void }) {
+  const data = SUB_OPTIONS[categoryId as keyof typeof SUB_OPTIONS];
+  const [selected, setSelected] = useState<string[]>([]);
 
-  const toggle = (id) =>
+  const toggle = (id: string) =>
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
@@ -678,7 +678,7 @@ function SubOptionStep({ categoryId, onNext }) {
                       className="flex items-start gap-3 text-left group p-3 hover:bg-orange-50 rounded-lg transition-colors"
                     >
                       <div
-                        className={`mt-0.5 flex-shrink-0 w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center transition-colors
+                        className={`mt-0.5 w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center transition-colors
                         ${
                           on
                             ? "border-orange-500 bg-orange-500"
@@ -740,7 +740,7 @@ function SubOptionStep({ categoryId, onNext }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // STEP 5 — PREFERENCE FILTERS (budget / timeline / family / purpose)
 // ─────────────────────────────────────────────────────────────────────────────
-function FilterStep({ onSubmit }) {
+function FilterStep({ onSubmit }: { onSubmit: (filters: { budget: string; timeline: string; family: string; purpose: string }) => void }) {
   const [budget, setBudget] = useState("");
   const [timeline, setTimeline] = useState("");
   const [family, setFamily] = useState("");
@@ -789,7 +789,7 @@ function FilterStep({ onSubmit }) {
               key={r.label}
               className="flex flex-col sm:flex-row sm:items-center gap-2 md:gap-3 p-3 md:p-4 bg-white rounded-lg border border-gray-200"
             >
-              <div className="w-full sm:w-48 flex-shrink-0">
+              <div className="w-full sm:w-48">
                 <label className="text-sm md:text-base font-medium text-gray-700">
                   {r.label} -
                 </label>
@@ -830,11 +830,17 @@ function ResultsPage({
   selectedSubs,
   filters,
   onReset,
+}: {
+  locationData: { country: string; state: string; city: string; region: string };
+  categoryId: string;
+  selectedSubs: string[];
+  filters: { budget: string; timeline: string; family: string; purpose: string };
+  onReset: () => void;
 }) {
   const catLabel =
     CATEGORY_CARDS.find((c) => c.id === categoryId)?.label.replace("\n", " ") ||
     "";
-  const subLabels = (SUB_OPTIONS[categoryId]?.items || [])
+  const subLabels = (SUB_OPTIONS[categoryId as keyof typeof SUB_OPTIONS]?.items || [])
     .filter((it) => selectedSubs.includes(it.id))
     .map((it) => it.label);
 
@@ -927,17 +933,17 @@ function ResultsPage({
 // ─────────────────────────────────────────────────────────────────────────────
 export default function Top50App() {
   const [step, setStep] = useState(1);
-  const [locationData, setLocationData] = useState({});
+  const [locationData, setLocationData] = useState({ country: "", state: "", city: "", region: "" });
   const [categoryId, setCategoryId] = useState("");
-  const [selectedSubs, setSelectedSubs] = useState([]);
-  const [filters, setFilters] = useState({});
+  const [selectedSubs, setSelectedSubs] = useState<string[]>([]);
+  const [filters, setFilters] = useState({ budget: "", timeline: "", family: "", purpose: "" });
 
   const reset = () => {
     setStep(1);
-    setLocationData({});
+    setLocationData({ country: "", state: "", city: "", region: "" });
     setCategoryId("");
     setSelectedSubs([]);
-    setFilters({});
+    setFilters({ budget: "", timeline: "", family: "", purpose: "" });
   };
 
   return (
