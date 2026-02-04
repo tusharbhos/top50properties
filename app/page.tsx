@@ -348,21 +348,21 @@ const DUMMY_RESULTS = [
     key: "Family Oriented Homes",
     location: "West Pune",
     highlight: "Established Residential Area",
-    link: "https://connectrainextjs.vercel.app/",
+    link: "https://demo7slide.vercel.app/",
   },
   {
     num: 2,
     key: "50+ Amenities",
     location: "West Pune",
     highlight: "2 Schools and Hospital in Vicinity",
-    link: "https://connectrainextjs.vercel.app/",
+    link: "https://demo7slide.vercel.app/",
   },
   {
     num: 3,
     key: "Largest Room Sizes",
     location: "West Pune",
     highlight: "Vastu Certified Homes",
-    link: "https://connectrainextjs.vercel.app/",
+    link: "https://demo7slide.vercel.app/",
   },
 ];
 
